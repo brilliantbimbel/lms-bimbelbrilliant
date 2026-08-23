@@ -42,5 +42,17 @@ class DatabaseSeeder extends Seeder
         Kelas::create(['nama_kelas' => 'Kelas 10 SMA']);
         Kelas::create(['nama_kelas' => 'Kelas 11 SMA']);
         Kelas::create(['nama_kelas' => 'Kelas 12 SMA']);
+        $this->call(UsersTableSeeder::class);
+        $this->call(KelasTableSeeder::class);
+        $this->call(MaterisTableSeeder::class);
+        $this->call(TryoutsTableSeeder::class);
+        $this->call(SoalsTableSeeder::class);
+        $this->call(HasilTryoutsTableSeeder::class);
+        $this->call(SettingsTableSeeder::class);
+        $this->call(KelasSiswaTableSeeder::class);
+        $this->call(KelasesTableSeeder::class);
+        $this->call(UjiansTableSeeder::class);
+        $this->call(JawabanSiswasTableSeeder::class);
+        $this->call(MateriSiswaSelesaiTableSeeder::class);
     }
 }
