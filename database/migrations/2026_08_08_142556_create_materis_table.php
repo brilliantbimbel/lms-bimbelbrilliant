@@ -15,7 +15,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
 
             // 2. FIXED: Mengacu ke nama tabel 'kelases' agar tidak foreign key mismatch
-            $table->foreignId('kelas_id')->nullable()->constrained('kelases')->onDelete('cascade');
+            $table->foreignId('kelas_id')->nullable()->constrained('kelas')->onDelete('cascade');
 
             $table->string('judul');
             $table->text('deskripsi')->nullable();
