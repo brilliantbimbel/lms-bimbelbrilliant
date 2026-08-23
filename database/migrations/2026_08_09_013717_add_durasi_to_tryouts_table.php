@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::table('tryouts', function (Blueprint $table) {
             // Tambahkan kolom durasi jika belum ada
             if (!Schema::hasColumn('tryouts', 'durasi')) {
-                $table->integer('durasi')->default(60)->after('tipe');
+                $table->integer('durasi')->default(60);
             }
         });
     }
