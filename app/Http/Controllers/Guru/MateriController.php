@@ -97,8 +97,8 @@ public function store(Request $request)
 
             $materi->save();
 
-            return redirect()->route('guru.materi.index')
-                ->with('success', 'Materi "' . $materi->judul . '" berhasil diunggah!');
+           return redirect()->back()
+    ->with('success', 'Materi "' . $materi->judul . '" berhasil diunggah!');
 
         } catch (\Exception $e) {
             return back()
