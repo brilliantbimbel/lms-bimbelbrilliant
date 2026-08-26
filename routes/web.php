@@ -4,9 +4,11 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\Guru\NilaiController;
+use App\Http\Controllers\Guru\MateriController;
 use App\Http\Controllers\Siswa\KuisController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+
 
 // Halaman Utama Langsung Redirect ke Login
 Route::get('/', function () {
@@ -82,12 +84,10 @@ Route::middleware(['auth', 'role:tentor'])->prefix('tentor')->name('guru.')->gro
     Route::get('/dashboard', [App\Http\Controllers\Guru\DashboardController::class, 'index'])->name('dashboard');
 
     // RUTE MODUL & MATERI GURU
-    // Rute Materi (Pastikan name-nya 'guru.materi.store' agar cocok dengan Blade Anda)
-    Route::get('/materi', [MateriController::class, 'index'])->name('guru.materi.index');
-    Route::post('/materi', [MateriController::class, 'store'])->name('guru.materi.store');
-    Route::put('/materi/{id}', [MateriController::class, 'update'])->name('guru.materi.update');
-    Route::delete('/materi/{id}', [MateriController::class, 'destroy'])->name('guru.materi.destroy');
-
+    Route::get('/materi', [MateriController::class, 'index'])->name('materi.index');
+    Route::post('/materi', [MateriController::class, 'store'])->name('materi.store');
+    Route::put('/materi/{id}', [MateriController::class, 'update'])->name('materi.update');
+    Route::delete('/materi/{id}', [MateriController::class, 'destroy'])->name('materi.destroy');
 
     // RUTE KUIS & TRYOUT GURU
     Route::get('/tryout', [App\Http\Controllers\Guru\TryoutController::class, 'index'])->name('tryout.index');
@@ -102,13 +102,12 @@ Route::middleware(['auth', 'role:tentor'])->prefix('tentor')->name('guru.')->gro
     Route::delete('/soal/{id}', [App\Http\Controllers\Guru\SoalController::class, 'destroy'])->name('soal.destroy');
 
     // Fitur Nilai Siswa
-    Route::get('/nilai', [\App\Http\Controllers\Guru\NilaiController::class, 'index'])->name('nilai.index');
-Route::get('/nilai/{id}', [\App\Http\Controllers\Guru\NilaiController::class, 'show'])->name('nilai.show');
-// Rute Koreksi Jawaban Isian oleh Guru
-    Route::get('/nilai/koreksi/{ujian_id}', [\App\Http\Controllers\Guru\NilaiController::class, 'koreksi'])->name('nilai.koreksi');
-    Route::post('/nilai/koreksi/{ujian_id}', [\App\Http\Controllers\Guru\NilaiController::class, 'simpanKoreksi'])->name('nilai.simpan-koreksi');
-Route::delete('/nilai/reset/{ujian_id}', [\App\Http\Controllers\Guru\NilaiController::class, 'resetUjian'])->name('nilai.reset');
-    });
+    Route::get('/nilai', [NilaiController::class, 'index'])->name('nilai.index');
+    Route::get('/nilai/{id}', [NilaiController::class, 'show'])->name('nilai.show');
+    Route::get('/nilai/koreksi/{ujian_id}', [NilaiController::class, 'koreksi'])->name('nilai.koreksi');
+    Route::post('/nilai/koreksi/{ujian_id}', [NilaiController::class, 'simpanKoreksi'])->name('nilai.simpan-koreksi');
+    Route::delete('/nilai/reset/{ujian_id}', [NilaiController::class, 'resetUjian'])->name('nilai.reset');
+});
 
 // --- AREA KHUSUS SISWA ---
 Route::middleware(['auth', 'role:siswa'])->prefix('siswa')->name('siswa.')->group(function () {
