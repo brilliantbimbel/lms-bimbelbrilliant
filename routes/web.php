@@ -82,11 +82,11 @@ Route::middleware(['auth', 'role:tentor'])->prefix('tentor')->name('guru.')->gro
     Route::get('/dashboard', [App\Http\Controllers\Guru\DashboardController::class, 'index'])->name('dashboard');
 
     // RUTE MODUL & MATERI GURU
-    Route::get('/materi', [App\Http\Controllers\Guru\MateriController::class, 'index'])->name('materi.index');
-    Route::post('/materi', [App\Http\Controllers\Guru\MateriController::class, 'store'])->name('materi.store');
-    Route::put('/materi/{id}', [App\Http\Controllers\Guru\MateriController::class, 'update'])->name('materi.update'); // <-- PERBAIKAN DI SINI
-    Route::delete('/materi/{id}', [App\Http\Controllers\Guru\MateriController::class, 'destroy'])->name('materi.destroy');
-    Route::get('/materi/preview/{id}', [App\Http\Controllers\Guru\MateriController::class, 'previewHtml'])->name('materi.preview');
+    // Rute Materi (Pastikan name-nya 'guru.materi.store' agar cocok dengan Blade Anda)
+    Route::get('/materi', [MateriController::class, 'index'])->name('guru.materi.index');
+    Route::post('/materi', [MateriController::class, 'store'])->name('guru.materi.store');
+    Route::put('/materi/{id}', [MateriController::class, 'update'])->name('guru.materi.update');
+    Route::delete('/materi/{id}', [MateriController::class, 'destroy'])->name('guru.materi.destroy');
 
 
     // RUTE KUIS & TRYOUT GURU
