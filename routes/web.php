@@ -80,7 +80,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 });
 
 // --- AREA KHUSUS GURU / TENTOR ---
-Route::middleware(['auth', 'role:tentor'])->prefix('tentor')->name('guru.')->group(function () {
+Route::middleware(['auth', 'role:tentor,guru'])->prefix('tentor')->name('guru.')->group(function () {
     Route::get('/dashboard', [App\Http\Controllers\Guru\DashboardController::class, 'index'])->name('dashboard');
 
     // RUTE MODUL & MATERI GURU
