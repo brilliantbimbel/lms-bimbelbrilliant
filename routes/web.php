@@ -6,6 +6,8 @@ use App\Http\Controllers\KelasController;
 use App\Http\Controllers\Guru\NilaiController;
 use App\Http\Controllers\Guru\MateriController;
 use App\Http\Controllers\Siswa\KuisController;
+use App\Http\Controllers\Siswa\TkaController; // <-- Tambahkan ini
+use App\Http\Controllers\Siswa\SimulasiTkaController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -107,6 +109,20 @@ Route::delete('/modul-pembelajaran/{id}', [MateriController::class, 'destroy'])-
     Route::get('/nilai/koreksi/{ujian_id}', [NilaiController::class, 'koreksi'])->name('nilai.koreksi');
     Route::post('/nilai/koreksi/{ujian_id}', [NilaiController::class, 'simpanKoreksi'])->name('nilai.simpan-koreksi');
     Route::delete('/nilai/reset/{ujian_id}', [NilaiController::class, 'resetUjian'])->name('nilai.reset');
+// Management Paket & Soal TKA
+    Route::get('/tka', [App\Http\Controllers\Guru\TkaController::class, 'index'])->name('tka.index');
+    Route::post('/tka', [App\Http\Controllers\Guru\TkaController::class, 'storePaket'])->name('tka.store');
+    Route::get('/tka/{paketId}/soal', [App\Http\Controllers\Guru\TkaController::class, 'showSoal'])->name('tka.soal');
+    Route::post('/tka/{paketId}/soal', [App\Http\Controllers\Guru\TkaController::class, 'storeSoal'])->name('tka.soal.store');
+    Route::put('/tka/soal/{soalId}', [App\Http\Controllers\Guru\TkaController::class, 'updateSoal'])->name('tka.soal.update');
+    Route::delete('/tka/soal/{id}', [App\Http\Controllers\Guru\TkaController::class, 'destroySoal'])->name('tka.soal.destroy');
+
+    // Management Nilai & Koreksi Manual
+    Route::get('/tka/{paketId}/nilai', [App\Http\Controllers\Guru\TkaController::class, 'rekapNilai'])->name('tka.nilai');
+    Route::post('/tka/sesi/{sesiId}/koreksi', [App\Http\Controllers\Guru\TkaController::class, 'simpanKoreksi'])->name('tka.koreksi');
+    // Route Reset Pengerjaan Siswa oleh Guru
+Route::delete('/tka/sesi/{sesiId}/reset', [App\Http\Controllers\Guru\TkaController::class, 'resetSesi'])->name('tka.sesi.reset');
+Route::delete('/tka/paket/{id}', [App\Http\Controllers\Guru\TkaController::class, 'destroyPaket'])->name('tka.destroy');
 });
 
 // --- AREA KHUSUS SISWA ---
@@ -123,6 +139,21 @@ Route::middleware(['auth', 'role:siswa'])->prefix('siswa')->name('siswa.')->grou
 
     // RUTE REVIEW SOAL (Hapus 'siswa.' dan '/siswa/' yang berlebih)
     Route::get('/tryout/{id}/review', [KuisController::class, 'review'])->name('tryout.review');
+
+    // TKA
+    Route::get('/login', [TkaController::class, 'login'])->name('login');
+    Route::post('/login', [TkaController::class, 'postLogin'])->name('login.post');
+
+    Route::get('/konfirmasi-data', [TkaController::class, 'konfirmasiData'])->name('konfirmasi_data');
+    Route::post('/konfirmasi-data', [TkaController::class, 'postKonfirmasiData'])->name('konfirmasi_data.post');
+
+    Route::get('/konfirmasi-tes', [TkaController::class, 'konfirmasiTes'])->name('konfirmasi_tes');
+    Route::post('/start-tes', [TkaController::class, 'startTes'])->name('start_tes');
+
+    Route::get('/proses-tes', [TkaController::class, 'prosesTes'])->name('proses_tes');
+    Route::post('/proses-tes/{paket_id}/simpan', [TkaController::class, 'simpanJawaban'])->name('tka.simpan');
+    Route::get('/tka/hasil/{sesi_id}', [TkaController::class, 'hasilTes'])->name('tka.hasil');
+    Route::get('/tka/pembahasan/{paket_id}', [TkaController::class, 'pembahasan'])->name('tka.pembahasan');
 });
 
 require __DIR__.'/auth.php';

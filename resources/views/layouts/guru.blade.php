@@ -47,7 +47,7 @@
                             <svg class="w-5 h-5 group-hover:text-sky-600 transition text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
                             <span class="text-sm">Kuis & Tryout</span>
                         </a>
-                        <a href="{{ route('guru.nilai.index') }}" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 transition group font-medium">
+                        <a href="{{ route('guru.tka.index') }}" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 transition group font-medium">
                             <svg class="w-5 h-5 group-hover:text-indigo-600 transition text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                             <span class="text-sm font-bold text-slate-700 group-hover:text-indigo-600">Simulasi TKA</span>
                         </a>

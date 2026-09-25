@@ -7,6 +7,7 @@ use App\Models\Tryout;
 use App\Models\Ujian;        // Model ini yang digunakan untuk data ujian
 use App\Models\Materi;
 use App\Models\JawabanSiswa;
+use App\Models\TkaPaket;     // <-- TAMBAHAN MODEL UNTUK SIMULASI TKA
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -54,8 +55,20 @@ class KuisController extends Controller
                 ->toArray();
         }
 
-        // Variabel $siswa ditambahkan ke dalam compact
-        return view('siswa.dashboard', compact('siswa', 'tryouts', 'riwayatUjian', 'materis', 'materiSelesaiIds'));
+        // --- TAMBAHAN AMBIL DATA SIMULASI TKA ---
+        $paketTka = TkaPaket::withCount('soals')
+            ->latest()
+            ->get();
+
+        // Variabel $paketTka ditambahkan ke dalam compact
+        return view('siswa.dashboard', compact(
+            'siswa',
+            'tryouts',
+            'riwayatUjian',
+            'materis',
+            'materiSelesaiIds',
+            'paketTka' // <-- VARIABEL DITAMBAHKAN KESINI
+        ));
     }
 
     public function mulai($id)
@@ -224,6 +237,7 @@ class KuisController extends Controller
 
         return view('siswa.materi.baca', compact('materi'));
     }
+
     public function review($id)
     {
         $tryout = Tryout::with('soals')->findOrFail($id);
