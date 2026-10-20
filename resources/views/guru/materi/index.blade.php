@@ -30,7 +30,7 @@
                 <span>Gagal Menyimpan! Periksa kembali inputan Anda:</span>
             </div>
             <ul class="list-disc list-inside text-xs space-y-1 text-amber-700 pl-6">
-                @foreach($errors->all() as$error)
+                @foreach($errors->all() as $error)
                     <li>{{ $error }}</li>
                 @endforeach
             </ul>
@@ -57,7 +57,7 @@
             <div>
                 <select id="filterKelas" onchange="filterTable()" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-sky-500 text-sm font-medium text-slate-700 bg-slate-50/50">
                     <option value="">-- Semua Kelas --</option>
-                    @foreach($kelases as$k)
+                    @foreach($kelases as $k)
                         <option value="{{ strtolower($k->nama_kelas) }}">{{ $k->nama_kelas }}</option>
                     @endforeach
                 </select>
@@ -84,7 +84,7 @@
     <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
         <div class="p-6 border-b border-slate-100 flex items-center justify-between">
             <h2 class="font-extrabold text-slate-800 text-base">Daftar Modul Diunggah</h2>
-            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total: {{ count($materis) }} Modul</span>
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total: {{ $materis->count() }} Modul</span>
         </div>
 
         <div class="overflow-x-auto">
@@ -101,95 +101,82 @@
                     </tr>
                 </thead>
                 <tbody id="materiTableBody" class="divide-y divide-slate-100">
-                    @if(count($materis) > 0)
-                        @foreach($materis as$m)
-                            <tr class="materi-row hover:bg-slate-50/50 transition"
-                                data-kelas="{{ strtolower($m->kelas?->nama_kelas ?? '') }}"
-                                data-mapel="{{ strtolower($m->mapel ?? '') }}">
-                                <td class="px-6 py-4 font-bold text-slate-800 judul-col">
-                                    {{ $m->judul }}
-                                    @if($m->deskripsi)
-                                        <p class="text-xs font-normal text-slate-400 mt-0.5 line-clamp-1">{{ $m->deskripsi }}</p>
-                                    @endif
-                                </td>
-                                <td class="px-6 py-4">
-                                    @if(($m->kategori_modul ?? 'modul') === 'latihan')
-                                        <span class="px-3 py-1 bg-amber-50 text-amber-600 font-bold text-xs rounded-full border border-amber-100 whitespace-nowrap">
-                                            📝 Latihan Soal
-                                        </span>
-                                    @else
-                                        <span class="px-3 py-1 bg-emerald-50 text-emerald-600 font-bold text-xs rounded-full border border-emerald-100 whitespace-nowrap">
-                                            📚 Modul Belajar
-                                        </span>
-                                    @endif
-                                </td>
-                                <td class="px-6 py-4">
-                                    <span class="px-3 py-1 bg-indigo-50 text-indigo-600 font-bold text-xs rounded-full border border-indigo-100 whitespace-nowrap">
-                                        {{ $m->mapel ?? 'Umum' }}
+                    @forelse($materis as $m)
+                        <tr class="materi-row hover:bg-slate-50/50 transition"
+                            data-kelas="{{ strtolower($m->kelas->nama_kelas ?? '') }}"
+                            data-mapel="{{ strtolower($m->mapel ?? '') }}">
+                            <td class="px-6 py-4 font-bold text-slate-800 judul-col">
+                                {{ $m->judul }}
+                                @if($m->deskripsi)
+                                    <p class="text-xs font-normal text-slate-400 mt-0.5 line-clamp-1">{{ $m->deskripsi }}</p>
+                                @endif
+                            </td>
+                            <td class="px-6 py-4">
+                                @if(($m->kategori_modul ?? 'modul') === 'latihan')
+                                    <span class="px-3 py-1 bg-amber-50 text-amber-600 font-bold text-xs rounded-full border border-amber-100 whitespace-nowrap">
+                                        📝 Latihan Soal
                                     </span>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <span class="px-3 py-1 bg-sky-50 text-sky-600 font-bold text-xs rounded-full border border-sky-100 whitespace-nowrap">
-                                        {{ $m->kelas?->nama_kelas ?? 'Semua Kelas' }}
+                                @else
+                                    <span class="px-3 py-1 bg-emerald-50 text-emerald-600 font-bold text-xs rounded-full border border-emerald-100 whitespace-nowrap">
+                                        📚 Modul Belajar
                                     </span>
-                                </td>
-                                <td class="px-6 py-4 uppercase text-xs font-bold text-slate-500">
-                                    {{ $m->tipe }}
-                                </td>
-                                <td class="py-4 px-6">
-                                    @if($m->tipe === 'pdf')
-                                        <a href="{{ asset('storage/' . $m->file_path) }}" target="_blank" class="inline-flex items-center gap-2 text-sky-600 font-bold hover:bg-sky-50 px-3 py-1.5 rounded-xl border border-sky-100 transition text-xs whitespace-nowrap">
-                                            📄 Buka PDF
-                                        </a>
-                                    @elseif($m->tipe === 'html')
-                                        <template id="html-materi-{{ $m->id }}">{!! $m->konten_html !!}</template>
+                                @endif
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="px-3 py-1 bg-indigo-50 text-indigo-600 font-bold text-xs rounded-full border border-indigo-100 whitespace-nowrap">
+                                    {{ $m->mapel ?? 'Umum' }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="px-3 py-1 bg-sky-50 text-sky-600 font-bold text-xs rounded-full border border-sky-100 whitespace-nowrap">
+                                    {{ $m->kelas->nama_kelas ?? 'Semua Kelas' }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 uppercase text-xs font-bold text-slate-500">
+                                {{ $m->tipe }}
+                            </td>
+                            <td class="py-4 px-6">
+                                @if($m->tipe === 'pdf')
+                                    <a href="{{ asset('storage/' . $m->file_path) }}" target="_blank" class="inline-flex items-center gap-2 text-sky-600 font-bold hover:bg-sky-50 px-3 py-1.5 rounded-xl border border-sky-100 transition text-xs whitespace-nowrap">
+                                        📄 Buka PDF
+                                    </a>
+                                @elseif($m->tipe === 'html')
+                                    <template id="html-materi-{{ $m->id }}">{!! $m->konten_html !!}</template>
 
-                                        <button type="button" onclick="previewHtml('{{ $m->id }}', '{{ addslashes($m->judul) }}')" class="inline-flex items-center gap-2 text-emerald-600 font-bold hover:bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-100 transition text-xs cursor-pointer whitespace-nowrap">
-                                            👁️ Review HTML
-                                        </button>
-                                    @elseif($m->tipe === 'video')
-                                        <a href="{{ $m->url_video }}" target="_blank" class="inline-flex items-center gap-2 text-rose-600 font-bold hover:bg-rose-50 px-3 py-1.5 rounded-xl border border-rose-100 transition text-xs whitespace-nowrap">
-                                            ▶️ Tonton Video
-                                        </a>
-                                    @else
-                                        <span class="text-slate-400 italic text-[10px]">Belum ada akses</span>
-                                    @endif
-                                </td>
-                                <td class="px-6 py-4 text-center">
-                                    <div class="flex items-center justify-center gap-2">
-                                        <button type="button"
-                                                data-id="{{ $m->id }}"
-                                                data-judul="{{ $m->judul }}"
-                                                data-kategori="{{ $m->kategori_modul ?? 'modul' }}"
-                                                data-kelas="{{ $m->kelas_id }}"
-                                                data-mapel="{{ $m->mapel ?? '' }}"
-                                                data-tipe="{{ $m->tipe }}"
-                                                data-deskripsi="{{ $m->deskripsi ?? '' }}"
-                                                data-video="{{ $m->url_video ?? '' }}"
-                                                data-html="{{ $m->konten_html ?? '' }}"
-                                                onclick="editMateriFromBtn(this)"
-                                                class="px-3 py-1.5 bg-amber-50 text-amber-600 hover:bg-amber-100 rounded-xl text-xs font-bold transition">
-                                            ✏️ Edit
-                                        </button>
+                                    <button type="button" onclick="previewHtml('{{ $m->id }}', '{{ addslashes($m->judul) }}')" class="inline-flex items-center gap-2 text-emerald-600 font-bold hover:bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-100 transition text-xs cursor-pointer whitespace-nowrap">
+                                        👁️ Review HTML
+                                    </button>
+                                @elseif($m->tipe === 'video')
+                                    <a href="{{ $m->url_video }}" target="_blank" class="inline-flex items-center gap-2 text-rose-600 font-bold hover:bg-rose-50 px-3 py-1.5 rounded-xl border border-rose-100 transition text-xs whitespace-nowrap">
+                                        ▶️ Tonton Video
+                                    </a>
+                                @else
+                                    <span class="text-slate-400 italic text-[10px]">Belum ada akses</span>
+                                @endif
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                <div class="flex items-center justify-center gap-2">
+                                    <button onclick="openEditModal({{ json_encode($m) }})" class="px-3 py-1.5 bg-amber-50 text-amber-600 hover:bg-amber-100 rounded-xl text-xs font-bold transition">
+                                        ✏️ Edit
+                                    </button>
 
-                                        <form action="{{ route('guru.materi.destroy', $m->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus materi ini?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="text-rose-500 hover:text-rose-700 font-bold text-xs px-3 py-1.5 bg-rose-50 rounded-xl hover:bg-rose-100 transition">
-                                                Hapus
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforeach
-                    @else
+                                    <form action="{{ route('guru.materi.destroy', $m->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus materi ini?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-rose-500 hover:text-rose-700 font-bold text-xs px-3 py-1.5 bg-rose-50 rounded-xl hover:bg-rose-100 transition">
+                                            Hapus
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
                         <tr>
                             <td colspan="7" class="px-6 py-10 text-center text-slate-400 font-medium">
                                 Belum ada materi yang diunggah. Klik tombol di atas untuk menambah materi baru.
                             </td>
                         </tr>
-                    @endif
+                    @endforelse
                 </tbody>
             </table>
         </div>
@@ -241,7 +228,7 @@
                     <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Pilih Kelas</label>
                     <select name="kelas_id" required class="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:ring-2 focus:ring-sky-500 text-sm">
                         <option value="">-- Pilih Kelas --</option>
-                        @foreach($kelases as$k)
+                        @foreach($kelases as $k)
                             <option value="{{ $k->id }}">{{ $k->nama_kelas }}</option>
                         @endforeach
                     </select>
@@ -350,7 +337,7 @@
                 <div>
                     <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Pilih Kelas</label>
                     <select id="edit_kelas_id" name="kelas_id" required class="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:ring-2 focus:ring-sky-500 text-sm">
-                        @foreach($kelases as$k)
+                        @foreach($kelases as $k)
                             <option value="{{ $k->id }}">{{ $k->nama_kelas }}</option>
                         @endforeach
                     </select>
@@ -413,20 +400,19 @@
     function openModal() { document.getElementById('materiModal').classList.remove('hidden'); }
     function closeModal() { document.getElementById('materiModal').classList.add('hidden'); }
 
-    function editMateriFromBtn(btn) {
+    function openEditModal(materi) {
         let form = document.getElementById('editMateriForm');
-        let id = btn.getAttribute('data-id');
 
-        form.action = `/tentor/materi/${id}`;
+        form.action = `/tentor/materi/${materi.id}`;
 
-        document.getElementById('edit_judul').value = btn.getAttribute('data-judul') || '';
-        document.getElementById('edit_kategori_modul').value = btn.getAttribute('data-kategori') || 'modul';
-        document.getElementById('edit_kelas_id').value = btn.getAttribute('data-kelas') || '';
-        document.getElementById('edit_mapel').value = btn.getAttribute('data-mapel') || '';
-        document.getElementById('edit_tipe').value = btn.getAttribute('data-tipe') || 'pdf';
-        document.getElementById('edit_deskripsi').value = btn.getAttribute('data-deskripsi') || '';
-        document.getElementById('edit_url_video').value = btn.getAttribute('data-video') || '';
-        document.getElementById('edit_konten_html').value = btn.getAttribute('data-html') || '';
+        document.getElementById('edit_judul').value = materi.judul;
+        document.getElementById('edit_kategori_modul').value = materi.kategori_modul || 'modul';
+        document.getElementById('edit_kelas_id').value = materi.kelas_id;
+        document.getElementById('edit_mapel').value = materi.mapel || '';
+        document.getElementById('edit_tipe').value = materi.tipe;
+        document.getElementById('edit_deskripsi').value = materi.deskripsi || '';
+        document.getElementById('edit_url_video').value = materi.url_video || '';
+        document.getElementById('edit_konten_html').value = materi.konten_html || '';
 
         toggleEditInputType();
         document.getElementById('editMateriModal').classList.remove('hidden');
@@ -477,6 +463,7 @@
         document.getElementById('modalHtmlFrame').src = "about:blank";
     }
 
+    // JS FILTER UNTUK MENYARING MAPEL & KELAS INSTAN
     function filterTable() {
         const selectedKelas = document.getElementById('filterKelas').value.toLowerCase();
         const selectedMapel = document.getElementById('filterMapel').value.toLowerCase();
