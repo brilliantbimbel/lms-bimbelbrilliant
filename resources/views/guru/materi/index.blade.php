@@ -101,83 +101,86 @@
                     </tr>
                 </thead>
                 <tbody id="materiTableBody" class="divide-y divide-slate-100">
-                    @forelse($materis as$m)
-                        <tr class="materi-row hover:bg-slate-50/50 transition"
-                            data-kelas="{{ strtolower($m->kelas?->nama_kelas ?? '') }}"
-                            data-mapel="{{ strtolower($m->mapel ?? '') }}">
-                            <td class="px-6 py-4 font-bold text-slate-800 judul-col">
-                                {{ $m->judul }}
-                                @if($m->deskripsi)
-                                    <p class="text-xs font-normal text-slate-400 mt-0.5 line-clamp-1">{{ $m->deskripsi }}</p>
-                                @endif
-                            </td>
-                            <td class="px-6 py-4">
-                                @if(($m->kategori_modul ?? 'modul') === 'latihan')
-                                    <span class="px-3 py-1 bg-amber-50 text-amber-600 font-bold text-xs rounded-full border border-amber-100 whitespace-nowrap">
-                                        📝 Latihan Soal
-                                    </span>
-                                @else
-                                    <span class="px-3 py-1 bg-emerald-50 text-emerald-600 font-bold text-xs rounded-full border border-emerald-100 whitespace-nowrap">
-                                        📚 Modul Belajar
-                                    </span>
-                                @endif
-                            </td>
-                            <td class="px-6 py-4">
-                                <span class="px-3 py-1 bg-indigo-50 text-indigo-600 font-bold text-xs rounded-full border border-indigo-100 whitespace-nowrap">
-                                    {{ $m->mapel ?? 'Umum' }}
-                                </span>
-                            </td>
-                            <td class="px-6 py-4">
-                                <span class="px-3 py-1 bg-sky-50 text-sky-600 font-bold text-xs rounded-full border border-sky-100 whitespace-nowrap">
-                                    {{ $m->kelas?->nama_kelas ?? 'Semua Kelas' }}
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 uppercase text-xs font-bold text-slate-500">
-                                {{ $m->tipe }}
-                            </td>
-                            <td class="py-4 px-6">
-                                @if($m->tipe === 'pdf')
-                                    <a href="{{ asset('storage/' . $m->file_path) }}" target="_blank" class="inline-flex items-center gap-2 text-sky-600 font-bold hover:bg-sky-50 px-3 py-1.5 rounded-xl border border-sky-100 transition text-xs whitespace-nowrap">
-                                        📄 Buka PDF
-                                    </a>
-                                @elseif($m->tipe === 'html')
-                                    <template id="html-materi-{{ $m->id }}">{!! $m->konten_html !!}</template>
+    @if(isset($materis) && count($materis) > 0)
+        @foreach($materis as $m)
+            <tr class="materi-row hover:bg-slate-50/50 transition"
+                data-kelas="{{ strtolower($m->kelas?->nama_kelas ?? '') }}"
+                data-mapel="{{ strtolower($m->mapel ?? '') }}">
+                <td class="px-6 py-4 font-bold text-slate-800 judul-col">
+                    {{ $m->judul }}
+                    @if($m->deskripsi)
+                        <p class="text-xs font-normal text-slate-400 mt-0.5 line-clamp-1">{{ $m->deskripsi }}</p>
+                    @endif
+                </td>
+                <td class="px-6 py-4">
+                    @if(($m->kategori_modul ?? 'modul') === 'latihan')
+                        <span class="px-3 py-1 bg-amber-50 text-amber-600 font-bold text-xs rounded-full border border-amber-100 whitespace-nowrap">
+                            📝 Latihan Soal
+                        </span>
+                    @else
+                        <span class="px-3 py-1 bg-emerald-50 text-emerald-600 font-bold text-xs rounded-full border border-emerald-100 whitespace-nowrap">
+                            📚 Modul Belajar
+                        </span>
+                    @endif
+                </td>
+                <td class="px-6 py-4">
+                    <span class="px-3 py-1 bg-indigo-50 text-indigo-600 font-bold text-xs rounded-full border border-indigo-100 whitespace-nowrap">
+                        {{ $m->mapel ?? 'Umum' }}
+                    </span>
+                </td>
+                <td class="px-6 py-4">
+                    <span class="px-3 py-1 bg-sky-50 text-sky-600 font-bold text-xs rounded-full border border-sky-100 whitespace-nowrap">
+                        {{ $m->kelas?->nama_kelas ?? 'Semua Kelas' }}
+                    </span>
+                </td>
+                <td class="px-6 py-4 uppercase text-xs font-bold text-slate-500">
+                    {{ $m->tipe }}
+                </td>
+                <td class="py-4 px-6">
+                    @if($m->tipe === 'pdf')
+                        <a href="{{ asset('storage/' . $m->file_path) }}" target="_blank" class="inline-flex items-center gap-2 text-sky-600 font-bold hover:bg-sky-50 px-3 py-1.5 rounded-xl border border-sky-100 transition text-xs whitespace-nowrap">
+                            📄 Buka PDF
+                        </a>
+                    @elseif($m->tipe === 'html')
+                        <template id="html-materi-{{ $m->id }}">{!! $m->konten_html !!}</template>
 
-                                    <button type="button" onclick="previewHtml('{{ $m->id }}', @js($m->judul))" class="inline-flex items-center gap-2 text-emerald-600 font-bold hover:bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-100 transition text-xs cursor-pointer whitespace-nowrap">
-                                        👁️ Review HTML
-                                    </button>
-                                @elseif($m->tipe === 'video')
-                                    <a href="{{ $m->url_video }}" target="_blank" class="inline-flex items-center gap-2 text-rose-600 font-bold hover:bg-rose-50 px-3 py-1.5 rounded-xl border border-rose-100 transition text-xs whitespace-nowrap">
-                                        ▶️ Tonton Video
-                                    </a>
-                                @else
-                                    <span class="text-slate-400 italic text-[10px]">Belum ada akses</span>
-                                @endif
-                            </td>
-                            <td class="px-6 py-4 text-center">
-                                <div class="flex items-center justify-center gap-2">
-                                    <button type="button" onclick="openEditModal(@js($m))" class="px-3 py-1.5 bg-amber-50 text-amber-600 hover:bg-amber-100 rounded-xl text-xs font-bold transition">
-                                        ✏️ Edit
-                                    </button>
+                        <button type="button" onclick="previewHtml('{{ $m->id }}', @js($m->judul))" class="inline-flex items-center gap-2 text-emerald-600 font-bold hover:bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-100 transition text-xs cursor-pointer whitespace-nowrap">
+                            👁️ Review HTML
+                        </button>
+                    @elseif($m->tipe === 'video')
+                        <a href="{{ $m->url_video }}" target="_blank" class="inline-flex items-center gap-2 text-rose-600 font-bold hover:bg-rose-50 px-3 py-1.5 rounded-xl border border-rose-100 transition text-xs whitespace-nowrap">
+                            ▶️ Tonton Video
+                        </a>
+                    @else
+                        <span class="text-slate-400 italic text-[10px]">Belum ada akses</span>
+                    @endif
+                </td>
+                <td class="px-6 py-4 text-center">
+                    <div class="flex items-center justify-center gap-2">
+                        <button type="button" onclick="openEditModal(@js($m))" class="px-3 py-1.5 bg-amber-50 text-amber-600 hover:bg-amber-100 rounded-xl text-xs font-bold transition">
+                            ✏️ Edit
+                        </button>
 
-                                    <form action="{{ route('guru.materi.destroy', $m->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus materi ini?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="text-rose-500 hover:text-rose-700 font-bold text-xs px-3 py-1.5 bg-rose-50 rounded-xl hover:bg-rose-100 transition">
-                                            Hapus
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="7" class="px-6 py-10 text-center text-slate-400 font-medium">
-                                Belum ada materi yang diunggah. Klik tombol di atas untuk menambah materi baru.
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
+                        <form action="{{ route('guru.materi.destroy', $m->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus materi ini?')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="text-rose-500 hover:text-rose-700 font-bold text-xs px-3 py-1.5 bg-rose-50 rounded-xl hover:bg-rose-100 transition">
+                                Hapus
+                            </button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        @endforeach
+    @else
+        <tr>
+            <td colspan="7" class="px-6 py-10 text-center text-slate-400 font-medium">
+                Belum ada materi yang diunggah. Klik tombol di atas untuk menambah materi baru.
+            </td>
+        </tr>
+    @endif
+</tbody>
+
             </table>
         </div>
     </div>
