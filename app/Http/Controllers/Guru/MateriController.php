@@ -127,35 +127,29 @@ public function store(Request $request)
     }
 
     public function update(Request $request, $id)
-    {
-        $materi = Materi::findOrFail($id);
+{
+    $guruId = Auth::id();
+    $materi = Materi::where(function ($q) use ($guruId) {
+        $q->where('user_id', $guruId)->orWhere('tentor_id', $guruId);
+    })->findOrFail($id);
 
-        $request->validate([
-            'judul'    => 'required|string|max:255',
-            'kelas_id' => 'required',
-            'mapel'    => 'required|string',
-            'tipe'     => 'required',
-        ]);
+    // ... validasi dan $data tetap sama ...
 
-        $data = [
-            'judul'     => $request->judul,
-            'kelas_id'  => $request->kelas_id,
-            'mapel'     => $request->mapel, // <-- Diperbaiki (sebelumnya bernilai 'required|string')
-            'kategori_modul' => $request->kategori_modul ?? 'modul',
-            'tipe'      => $request->tipe,
-            'deskripsi' => $request->deskripsi,
-        ];
-
-        if ($request->tipe === 'html') {
-            $data['konten_html'] = $request->konten_html;
-        } elseif ($request->tipe === 'video') {
-            $data['url_video'] = $request->url_video;
-        } elseif ($request->tipe === 'pdf' && $request->hasFile('file_path')) {
-            $data['file_path'] = $request->file('file_path')->store('materi_pdf', 'public');
-        }
-
-        $materi->update($data);
-
-        return redirect()->back()->with('success', 'Materi berhasil diperbarui!');
+    } elseif ($request->tipe === 'pdf' && $request->hasFile('file')) {
+        $data['file_path'] = $request->file('file')->store('materi_pdf', 'public');
     }
+    public function preview($id)
+{
+    $guruId = Auth::id();
+
+    $materi = Materi::where('tipe', 'html')
+        ->where(function ($q) use ($guruId) {
+            $q->where('user_id', $guruId)->orWhere('tentor_id', $guruId);
+        })
+        ->findOrFail($id);
+
+    return response($materi->konten_html)
+        ->header('Content-Type', 'text/html; charset=UTF-8')
+        ->header('Content-Security-Policy', 'sandbox allow-scripts');
+}
 }

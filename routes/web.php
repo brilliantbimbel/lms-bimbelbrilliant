@@ -90,6 +90,7 @@ Route::get('/modul-pembelajaran', [MateriController::class, 'index'])->name('mat
 Route::post('/modul-pembelajaran', [MateriController::class, 'store'])->name('materi.store');
 Route::put('/modul-pembelajaran/{id}', [MateriController::class, 'update'])->name('materi.update');
 Route::delete('/modul-pembelajaran/{id}', [MateriController::class, 'destroy'])->name('materi.destroy');
+Route::get('/modul-pembelajaran/{id}/preview', [MateriController::class, 'preview'])->name('materi.preview');
 
     // RUTE KUIS & TRYOUT GURU
     Route::get('/tryout', [App\Http\Controllers\Guru\TryoutController::class, 'index'])->name('tryout.index');

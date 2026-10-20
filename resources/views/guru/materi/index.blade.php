@@ -141,11 +141,12 @@
                                         📄 Buka PDF
                                     </a>
                                 @elseif($m->tipe === 'html')
-                                    <template id="html-materi-{{ $m->id }}">{!! $m->konten_html !!}</template>
+                                    <button type="button"
+        onclick="previewHtml('{{ route('guru.materi.preview', $m->id) }}', @js($m->judul))"
+        class="...">
+    👁️ Review HTML
+</button
 
-                                    <button type="button" onclick="previewHtml('{{ $m->id }}', '{{ addslashes($m->judul) }}')" class="inline-flex items-center gap-2 text-emerald-600 font-bold hover:bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-100 transition text-xs cursor-pointer whitespace-nowrap">
-                                        👁️ Review HTML
-                                    </button>
                                 @elseif($m->tipe === 'video')
                                     <a href="{{ $m->url_video }}" target="_blank" class="inline-flex items-center gap-2 text-rose-600 font-bold hover:bg-rose-50 px-3 py-1.5 rounded-xl border border-rose-100 transition text-xs whitespace-nowrap">
                                         ▶️ Tonton Video
@@ -195,7 +196,7 @@
             <button type="button" onclick="closeModalPreview()" class="text-slate-400 hover:text-slate-600 font-bold p-2 transition-transform hover:scale-110">✕</button>
         </div>
         <div class="p-4 flex-1 bg-slate-100 overflow-hidden">
-            <iframe id="modalHtmlFrame" class="w-full h-full border-0 bg-white rounded-2xl shadow-inner"></iframe>
+            <iframe id="modalHtmlFrame" sandbox="allow-scripts" class="w-full h-full border-0 bg-white rounded-2xl shadow-inner"></iframe>
         </div>
     </div>
 </div>
@@ -403,7 +404,7 @@
     function openEditModal(materi) {
         let form = document.getElementById('editMateriForm');
 
-        form.action = `/tentor/materi/${materi.id}`;
+        form.action = "{{ route('guru.materi.update', ':id') }}".replace(':id', materi.id);
 
         document.getElementById('edit_judul').value = materi.judul;
         document.getElementById('edit_kategori_modul').value = materi.kategori_modul || 'modul';
@@ -442,21 +443,11 @@
         document.getElementById('subInputHtmlFile').classList.toggle('hidden', inputType !== 'file');
     }
 
-    function previewHtml(id, title) {
-        let tpl = document.getElementById('html-materi-' + id);
-        if (!tpl) return;
-
-        document.getElementById('modalHtmlTitle').innerText = title;
-
-        let iframe = document.getElementById('modalHtmlFrame');
-        let iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-
-        iframeDoc.open();
-        iframeDoc.write(tpl.innerHTML);
-        iframeDoc.close();
-
-        document.getElementById('modalPreviewHtml').classList.remove('hidden');
-    }
+    function previewHtml(url, title) {
+    document.getElementById('modalHtmlTitle').innerText = title;
+    document.getElementById('modalHtmlFrame').src = url;
+    document.getElementById('modalPreviewHtml').classList.remove('hidden');
+}
 
     function closeModalPreview() {
         document.getElementById('modalPreviewHtml').classList.add('hidden');
