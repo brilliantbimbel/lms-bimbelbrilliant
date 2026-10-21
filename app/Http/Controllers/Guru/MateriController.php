@@ -22,21 +22,25 @@ class MateriController extends Controller
         });
     }
 
-    public function index()
-    {
-        $guruId = Auth::id();
+    public function index(Request $request)
+{
+    $guruId = Auth::id();
 
-        $mapels = config('mapel.list');
+    $mapels = config('mapel.list');
 
-        $kelases = Kelas::where('tentor_id', $guruId)->get();
+    $kelases = Kelas::where('tentor_id', $guruId)->get();
 
-        $materis = $this->materiMilikGuru()
-            ->with('kelas')
-            ->latest()
-            ->get();
+    $materis = $this->materiMilikGuru()
+        ->with('kelas')
+        ->when($request->filled('kelas_id'), fn ($q) => $q->where('kelas_id', $request->kelas_id))
+        ->when($request->filled('mapel'), fn ($q) => $q->where('mapel', $request->mapel))
+        ->when($request->filled('q'), fn ($q) => $q->where('judul', 'like', '%' . $request->q . '%'))
+        ->latest()
+        ->paginate(10)
+        ->withQueryString();
 
-        return view('guru.materi.index', compact('materis', 'kelases', 'mapels'));
-    }
+    return view('guru.materi.index', compact('materis', 'kelases', 'mapels'));
+}
 
     public function store(Request $request)
     {

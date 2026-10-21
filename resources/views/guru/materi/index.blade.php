@@ -47,44 +47,34 @@
         </button>
     </div>
 
-    <!-- PANEL FILTER PER KELAS & PER MAPEL -->
-    <div class="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-sm space-y-3">
-        <div class="flex items-center justify-between">
-            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">🔍 Filter Tampilan Materi</span>
-            <button onclick="resetFilter()" class="text-xs font-semibold text-rose-500 hover:underline">Reset Filter</button>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div>
-                <select id="filterKelas" onchange="filterTable()" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-sky-500 text-sm font-medium text-slate-700 bg-slate-50/50">
-                    <option value="">-- Semua Kelas --</option>
-                    @foreach($kelases as $k)
-                        <option value="{{ strtolower($k->nama_kelas) }}">{{ $k->nama_kelas }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div>
-                <select id="filterMapel" onchange="filterTable()" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-sky-500 text-sm font-medium text-slate-700 bg-slate-50/50">
-                    <option value="">-- Semua Mata Pelajaran --</option>
-                    <option value="ipa">IPA</option>
-                    <option value="ips">IPS</option>
-                    <option value="matematika">Matematika</option>
-                    <option value="bahasa indonesia">Bahasa Indonesia</option>
-                    <option value="bahasa inggris">Bahasa Inggris</option>
-                    <option value="fisika">Fisika</option>
-                    <option value="kimia">Kimia</option>
-                    <option value="biologi">Biologi</option>
-                </select>
-            </div>
-            <div>
-                <input type="text" id="filterSearch" onkeyup="filterTable()" placeholder="Cari judul materi..." class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-sky-500 text-sm font-medium text-slate-700 bg-slate-50/50">
-            </div>
-        </div>
+    <form method="GET" action="{{ route('guru.materi.index') }}" class="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-sm space-y-3">
+    <div class="flex items-center justify-between">
+        <span class="text-xs font-bold uppercase tracking-wider text-slate-400">🔍 Filter Tampilan Materi</span>
+        <a href="{{ route('guru.materi.index') }}" class="text-xs font-semibold text-rose-500 hover:underline">Reset Filter</a>
     </div>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <select name="kelas_id" onchange="this.form.submit()" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-sky-500 text-sm font-medium text-slate-700 bg-slate-50/50">
+            <option value="">-- Semua Kelas --</option>
+            @foreach($kelases as $k)
+                <option value="{{ $k->id }}" @selected(request('kelas_id') == $k->id)>{{ $k->nama_kelas }}</option>
+            @endforeach
+        </select>
+
+        <select name="mapel" onchange="this.form.submit()" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-sky-500 text-sm font-medium text-slate-700 bg-slate-50/50">
+            <option value="">-- Semua Mata Pelajaran --</option>
+            @foreach(['IPA','IPS','Matematika','Bahasa Indonesia','Bahasa Inggris','Fisika','Kimia','Biologi'] as $mp)
+                <option value="{{ $mp }}" @selected(request('mapel') === $mp)>{{ $mp }}</option>
+            @endforeach
+        </select>
+
+        <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari judul, lalu tekan Enter..." class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-sky-500 text-sm font-medium text-slate-700 bg-slate-50/50">
+    </div>
+</form>
 
     <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
         <div class="p-6 border-b border-slate-100 flex items-center justify-between">
             <h2 class="font-extrabold text-slate-800 text-base">Daftar Modul Diunggah</h2>
-            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total: {{ $materis->count() }} Modul</span>
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total: {{ $materis->total() }} Modul</span>
         </div>
 
         <div class="overflow-x-auto">
@@ -181,6 +171,11 @@
                 </tbody>
             </table>
         </div>
+        @if($materis->hasPages())
+    <div class="px-6 py-4 border-t border-slate-100">
+        {{ $materis->links() }}
+    </div>
+@endif
     </div>
 
 </div>
