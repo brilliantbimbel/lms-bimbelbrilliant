@@ -10,6 +10,7 @@ use App\Models\Kelas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class TkaController extends Controller
 {
@@ -235,14 +236,20 @@ public function destroyPaket($id)
 {
     $paket = TkaPaket::findOrFail($id);
 
-    // Hapus relasi terkait jika belum terpasang onDelete('cascade') di database
-    foreach ($paket->soals as $soal) {
-        $soal->jawabans()->delete();
-        $soal->delete();
-    }
+    DB::transaction(function () use ($paket) {
+        $sesiIds = $paket->sesis()->pluck('id');
+        $soalIds = $paket->soals()->pluck('id');
 
-    $paket->sesis()->delete();
-    $paket->delete();
+        // Hapus jawaban siswa yang terkait sesi atau soal paket ini
+        DB::table('tka_jawabans')
+            ->whereIn('tka_sesi_id', $sesiIds)
+            ->orWhereIn('tka_soal_id', $soalIds)
+            ->delete();
+
+        $paket->sesis()->delete();
+        $paket->soals()->delete();
+        $paket->delete();
+    });
 
     return redirect()->back()->with('success', 'Paket simulasi berhasil dihapus.');
 }
