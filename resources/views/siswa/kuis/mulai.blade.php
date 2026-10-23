@@ -42,7 +42,7 @@
 
                     @if(isset($soal->gambar) && $soal->gambar)
                         <div class="pl-10">
-                            <img src="{{ asset('storage/' . $soal->gambar) }}" alt="Gambar Soal" class="max-w-full h-auto rounded-xl border border-slate-200 shadow-sm">
+                            <img src="{{ route('berkas', ['path' => $soal->gambar]) }}" alt="Gambar Soal" class="max-w-full h-auto rounded-xl border border-slate-200 shadow-sm">
                         </div>
                     @endif
 

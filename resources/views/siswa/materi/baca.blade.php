@@ -34,7 +34,7 @@
         @if(strtolower($materi->tipe) === 'pdf' || strtolower($materi->tipe) === 'file')
             @if(!empty($materi->file_path))
                 <div class="w-full h-[80vh] rounded-xl overflow-hidden border border-slate-200">
-                    <iframe src="{{ asset('storage/' . $materi->file_path) }}" class="w-full h-full"></iframe>
+                    <iframe src="{{ route('berkas', ['path' => $materi->file_path]) }}" class="w-full h-full"></iframe>
                 </div>
             @else
                 <div class="p-4 bg-amber-50 text-amber-700 border border-amber-200 rounded-xl text-sm">File PDF belum diunggah.</div>

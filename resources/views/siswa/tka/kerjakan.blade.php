@@ -182,7 +182,7 @@
 
                 const imgEl = document.getElementById('stimulus-image');
                 if (s.stimulus_gambar) {
-                    imgEl.src = `/storage/${s.stimulus_gambar}`;
+                    imgEl.src = "{{ url('/berkas') }}/" + encodeURI(s.stimulus_gambar);
                     imgEl.classList.remove('hidden');
                 } else {
                     imgEl.classList.add('hidden');

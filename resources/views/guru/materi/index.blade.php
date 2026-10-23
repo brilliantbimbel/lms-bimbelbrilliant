@@ -127,7 +127,7 @@
                             </td>
                             <td class="py-4 px-6">
                                 @if($m->tipe === 'pdf')
-                                    <a href="{{ asset('storage/' . $m->file_path) }}" target="_blank" class="inline-flex items-center gap-2 text-sky-600 font-bold hover:bg-sky-50 px-3 py-1.5 rounded-xl border border-sky-100 transition text-xs whitespace-nowrap">
+                                    <a href="{{ route('berkas', ['path' => $materi->file_path]) }}" target="_blank" class="inline-flex items-center gap-2 text-sky-600 font-bold hover:bg-sky-50 px-3 py-1.5 rounded-xl border border-sky-100 transition text-xs whitespace-nowrap">
                                         📄 Buka PDF
                                     </a>
                                 @elseif($m->tipe === 'html')

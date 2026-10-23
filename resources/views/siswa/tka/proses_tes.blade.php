@@ -50,7 +50,7 @@
                            {{-- Cek apakah kolom stimulus_gambar terisi --}}
 @if (!empty($soal->stimulus_gambar))
     <div class="mb-4 flex justify-center bg-gray-50 p-2 border border-gray-200 rounded-lg">
-        <img src="{{ asset('storage/' . $soal->stimulus_gambar) }}"
+        <img src="{{ route('berkas', ['path' => $soal->stimulus_gambar]) }}"
              alt="Gambar Stimulus"
              class="max-w-full max-h-96 rounded object-contain"
              onerror="this.onerror=null; this.src='{{ asset($soal->stimulus_gambar) }}';">

@@ -10,6 +10,7 @@ use App\Http\Controllers\Siswa\TkaController; // <-- Tambahkan ini
 use App\Http\Controllers\Siswa\SimulasiTkaController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\BerkasController;
 
 
 // Halaman Utama Langsung Redirect ke Login
@@ -29,6 +30,11 @@ Route::get('/dashboard', function () {
 
     return redirect()->route('siswa.dashboard');
 })->middleware(['auth'])->name('dashboard');
+
+Route::middleware('auth')
+    ->get('/berkas/{path}', [BerkasController::class, 'show'])
+    ->where('path', '.*')
+    ->name('berkas');
 
 // --- RUTE PROFILE (Dibutuhkan Navigasi Breeze) ---
 Route::middleware('auth')->group(function () {

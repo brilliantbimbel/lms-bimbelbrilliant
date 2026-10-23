@@ -143,7 +143,7 @@
                             @if($s->stimulus_gambar)
                                 <div class="p-3 bg-gray-50 border rounded-lg text-center">
                                     <span class="font-bold block text-xs text-gray-600 mb-2 text-left">Gambar / Infografis:</span>
-                                    <img src="{{ asset('storage/' . $s->stimulus_gambar) }}" class="max-h-64 mx-auto rounded border shadow-sm">
+                                    <img src="{{ route('berkas', ['path' => $s->stimulus_gambar]) }}" class="max-h-64 mx-auto rounded border shadow-sm">
                                 </div>
                             @endif
 
