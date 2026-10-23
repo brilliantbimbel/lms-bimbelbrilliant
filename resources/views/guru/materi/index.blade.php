@@ -122,29 +122,25 @@
                                     {{ $m->kelas->nama_kelas ?? 'Semua Kelas' }}
                                 </span>
                             </td>
-                            <td class="px-6 py-4 uppercase text-xs font-bold text-slate-500">
-                                {{ $m->tipe }}
-                            </td>
-                            <td class="py-4 px-6">
-                                @if($m->tipe === 'pdf')
-                                    <a href="{{ route('berkas', ['path' => $materi->file_path]) }}" target="_blank" class="inline-flex items-center gap-2 text-sky-600 font-bold hover:bg-sky-50 px-3 py-1.5 rounded-xl border border-sky-100 transition text-xs whitespace-nowrap">
-                                        📄 Buka PDF
-                                    </a>
-                                @elseif($m->tipe === 'html')
-                                    <button type="button"
-        onclick="previewHtml('{{ route('guru.materi.preview', $m->id) }}', @js($m->judul))"
-        class="...">
-    👁️ Review HTML
-</button
-
-                                @elseif($m->tipe === 'video')
-                                    <a href="{{ $m->url_video }}" target="_blank" class="inline-flex items-center gap-2 text-rose-600 font-bold hover:bg-rose-50 px-3 py-1.5 rounded-xl border border-rose-100 transition text-xs whitespace-nowrap">
-                                        ▶️ Tonton Video
-                                    </a>
-                                @else
-                                    <span class="text-slate-400 italic text-[10px]">Belum ada akses</span>
-                                @endif
-                            </td>
+                    <td class="py-4 px-6">
+    @if($m->tipe === 'pdf')
+        <a href="{{ route('berkas', ['path' => $m->file_path]) }}" target="_blank" class="inline-flex items-center gap-2 text-sky-600 font-bold hover:bg-sky-50 px-3 py-1.5 rounded-xl border border-sky-100 transition text-xs whitespace-nowrap">
+            📄 Buka PDF
+        </a>
+    @elseif($m->tipe === 'html')
+        <button type="button"
+                onclick="previewHtml('{{ route('guru.materi.preview', $m->id) }}', @js($m->judul))"
+                class="inline-flex items-center gap-2 text-emerald-600 font-bold hover:bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-100 transition text-xs cursor-pointer whitespace-nowrap">
+            👁️ Review HTML
+        </button>
+    @elseif($m->tipe === 'video')
+        <a href="{{ $m->url_video }}" target="_blank" class="inline-flex items-center gap-2 text-rose-600 font-bold hover:bg-rose-50 px-3 py-1.5 rounded-xl border border-rose-100 transition text-xs whitespace-nowrap">
+            ▶️ Tonton Video
+        </a>
+    @else
+        <span class="text-slate-400 italic text-[10px]">Belum ada akses</span>
+    @endif
+</td>
                             <td class="px-6 py-4 text-center">
                                 <div class="flex items-center justify-center gap-2">
                                     <button onclick="openEditModal({{ json_encode($m) }})" class="px-3 py-1.5 bg-amber-50 text-amber-600 hover:bg-amber-100 rounded-xl text-xs font-bold transition">
