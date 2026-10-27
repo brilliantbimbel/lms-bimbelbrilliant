@@ -59,13 +59,13 @@
 
                             <!-- Teks Stimulus / Wacana (Jika Ada) -->
                             @if(!empty($soal->stimulus))
-                                <div class="text-gray-700 text-sm mb-4 bg-gray-50 p-4 rounded-lg border border-gray-200 leading-relaxed">
+                                <div class="text-gray-700 text-sm mb-4 bg-gray-50 p-4 rounded-lg border border-gray-200 leading-relaxed whitespace-pre-line">
                                     {!! $soal->stimulus !!}
                                 </div>
                             @endif
 
                             <!-- Pertanyaan Soal -->
-                            <div class="text-gray-900 text-base leading-relaxed mb-6 font-semibold">
+                            <div class="text-gray-900 text-base leading-relaxed mb-6 font-semibold whitespace-pre-line">
                                 {!! $soal->pertanyaan !!}
                             </div>
 

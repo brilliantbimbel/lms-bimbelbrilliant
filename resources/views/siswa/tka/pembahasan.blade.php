@@ -35,7 +35,7 @@
                     </span>
                 </div>
 
-                <div class="text-sm text-slate-800 leading-relaxed">
+                <div class="text-sm text-slate-800 leading-relaxed whitespace-pre-line">
                     {!! $soal->pertanyaan !!}
                 </div>
 
@@ -87,7 +87,7 @@
 
                 <!-- Pembahasan/Penjelasan Soal -->
                 @if(!empty($soal->pembahasan))
-                    <div class="p-4 bg-sky-50 border border-sky-200 rounded-xl text-xs text-sky-900 space-y-1">
+                    <div class="p-4 bg-sky-50 border border-sky-200 rounded-xl text-xs text-sky-900 space-y-1 ">
                         <strong class="font-bold text-sky-900 block">💡 Pembahasan Soal:</strong>
                         <div class="leading-relaxed">{!! $soal->pembahasan !!}</div>
                     </div>
