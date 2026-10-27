@@ -15,9 +15,9 @@
     <!-- Top Navbar Header -->
     <header class="bg-blue-900 text-white px-8 py-3 flex justify-between items-center shadow-md">
         <div class="flex items-center space-x-3">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/9/9c/Logo_Tut_Wuri_Handayani.png" alt="Tut Wuri Handayani" class="h-10 w-auto">
+            <img src="{{ asset('images/tutwuri.png') }}" alt="Tut Wuri Handayani" class="h-12 w-auto">
             <div>
-                <h1 class="font-bold text-base tracking-wide">PUSMENDIK - ANBK</h1>
+                <h1 class="font-bold text-base tracking-wide">Bimbel Brilliant - Simulasi TKA</h1>
                 <p class="text-xs text-blue-200 uppercase font-semibold">{{ $paket->mapel ?? 'Mata Ujian' }}</p>
             </div>
         </div>

@@ -24,7 +24,7 @@
     <header class="px-8 py-3 flex justify-between items-center text-white">
         <div class="flex items-center space-x-3">
             <!-- Logo Tut Wuri Handayani -->
-            <img src="https://upload.wikimedia.org/wikipedia/commons/9/9c/Logo_Tut_Wuri_Handayani.png" alt="Tut Wuri Handayani" class="h-12 w-auto">
+            <img src="{{ asset('images/tutwuri.png') }}" alt="Tut Wuri Handayani" class="h-12 w-auto">
             <div>
                 <h1 class="font-bold text-lg tracking-wide leading-tight">Bimbel Brilliant</h1>
                 <p class="text-xs tracking-wider text-blue-200 uppercase font-semibold">APLIKASI SIMULASI TKA</p>
